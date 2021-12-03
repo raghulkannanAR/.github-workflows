@@ -1,0 +1,37 @@
+name: CI
+
+# Controls when the workflow will run
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    
+#       - name: Upload File to Headspin
+#         run: | 
+#           curl --location --request POST 'https://27516e17e00845e888663172623e9ea5@api-dev.headspin.io/v0/apps/apk/upload' \ --header 'Content-Type: application/vnd.android.package-archive' \--data-binary '@okc.apk'
+      
+#       - name: Install File to Headspin
+#         run: | 
+#           curl --location --request POST 'https://27516e17e00845e888663172623e9ea5@api-dev.headspin.io/v0/adb/9632190603001ND/install' --header 'Content-Type: application/vnd.android.package-archive' --data-binary '@okc.apk'
+           
+      - uses: actions/checkout@v2
+      
+      - name: Upload File to Headspin
+        id: myRequest
+        uses: JantHsueh/upload-file-action@master
+        with:
+         url: https://27516e17e00845e888663172623e9ea5@api-dev.headspin.io/v0/apps/apk/upload
+         forms: '{"token":"sfb8r8psm92zx3zff54zbq7p","source_type":"raw", "filter":"all"}'
+         fileForms: '{"file":"2.53.0-assembleProdRelease.apk"}'
+      
+      - name: Show Response
+        run: echo ${{ steps.myRequest.outputs.data }}
